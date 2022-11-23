@@ -20,40 +20,19 @@ class WindowClass(QMainWindow, form_mainclass):
         super().__init__()
         self.setupUi(self)
 
-        self.search.clicked.connect(self.searching)
-        # self.search.clicked.connect(self.goSearchWindow)
+        self.search.clicked.connect(self.goSearchWindow)
         self.ADD.clicked.connect(self.ADDFunction)
         self.DELETE.clicked.connect(self.DELFunction)
-
-        self.url = 'https://openapi.foodsafetykorea.go.kr/api'
-        self.key = '56bdaba970084b289ebc'
 
         self.Tuples = 6
         self.tableWidget.item(0, 0).setBackground(QtGui.QColor(255, 100, 100))
 
-    def searching(self):
-        print(self.searchtext.toPlainText())
-        if self.searchtext.toPlainText() == '':
-            print("noThing")
-        else:
-            print(self.searchtext.toPlainText(), "검색결과 입니다.")
-
-            res = requests.get(api_get.getURL(
-                self.url, self.key, self.searchtext.toPlainText()))
-            recipe = res.json()
-            for a in recipe['COOKRCP01']['row']:
-                print(a['RCP_NM'])
-
+    def goSearchWindow(self):
         self.hide()  # 메인윈도우 숨김
         self.search = searchwindow(self.searchtext.toPlainText())
         self.search.exec()  # search 창 닫을 때까지 기다림
+        self.searchtext.setText('')
         self.show()  # search 창을 닫으면 다시 첫 번째 창이 보여짐
-
-    # def goSearchWindow(self):
-    #     self.hide()  # 메인윈도우 숨김
-    #     self.search = searchwindow(self.searchtext.toPlainText())
-    #     self.search.exec()  # search 창 닫을 때까지 기다림
-    #     self.show()  # search 창을 닫으면 다시 첫 번째 창이 보여짐
 
     def ADDFunction(self):
         # ADD 버튼 눌릴 시
@@ -79,15 +58,35 @@ class searchwindow(QDialog, QWidget, form_searchclass):
         super(searchwindow, self).__init__()
         self.initUi()
         self.show()
+
+        # API용 변수들
+        self.url = 'https://openapi.foodsafetykorea.go.kr/api'
+        self.key = '56bdaba970084b289ebc'
         self.foodname = foodname
 
+        self.searching()
+
         self.S_BackBtn.clicked.connect(self.goMainWindow)
+        self.S_searchBtn.clicked.connect(self.searching)
 
     def initUi(self):
         self.setupUi(self)
 
     def goMainWindow(self):
         self.close()  # 클릭시 종료됨.
+
+    def searching(self):
+        self.S_searchtext.setText(self.foodname)
+        if self.S_searchtext.toPlainText() == '':
+            print("noThing")
+        else:
+            print(self.S_searchtext.toPlainText(), "검색결과 입니다.")
+
+            res = requests.get(api_get.getURL(
+                self.url, self.key, self.S_searchtext.toPlainText()))
+            recipe = res.json()
+            for a in recipe['COOKRCP01']['row']:
+                print(a['RCP_NM'])
 
 
 if __name__ == "__main__":

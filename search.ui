@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QTextEdit" name="searchtext">
+  <widget class="QTextEdit" name="S_searchtext">
    <property name="enabled">
     <bool>true</bool>
    </property>
