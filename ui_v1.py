@@ -132,7 +132,8 @@ class recipewindow(QDialog, QWidget, form_recipeclass):
         self.close()  # 클릭시 종료됨.
 
     def pushinfo(self):
-        print(1)
+        #API 변수
+
 
 
 
