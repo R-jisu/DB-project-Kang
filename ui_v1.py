@@ -40,7 +40,6 @@ class WindowClass(QMainWindow, form_mainclass):
         self.search = searchwindow(self.searchtext.toPlainText())
         self.search.exec()  # search 창 닫을 때까지 기다림
         self.searchtext.setText('')
-        print(1)
         WindowClass().show()  # search 창을 닫으면 다시 첫 번째 창이 보여짐
 
     def ADDFunction(self):
@@ -72,10 +71,10 @@ class searchwindow(QDialog, QWidget, form_searchclass):
         self.key = '56bdaba970084b289ebc'
         self.foodname = foodname
 
+        self.S_searchtext.setText(self.foodname)
         self.searching()
 
         self.S_BackBtn.clicked.connect(self.goMainWindow)
-        self.S_searchBtn.clicked.connect(self.searching)
         self.S_searchBtn.clicked.connect(self.searching)
         self.S_tableWidget.doubleClicked.connect(self.goRecipeWindow)
 
@@ -92,7 +91,6 @@ class searchwindow(QDialog, QWidget, form_searchclass):
         searchwindow(self.foodname).close()  # 윈도우 숨김
         self.recipe = recipewindow()
         self.recipe.exec()  # recipe 창 닫을 때까지 기다림
-        print(2)
         searchwindow(self.foodname).show()  # recipe 창을 닫으면 다시 첫 번째 창이 보여짐
 
     def goMainWindow(self):
@@ -100,7 +98,6 @@ class searchwindow(QDialog, QWidget, form_searchclass):
 
     def searching(self):
         self.Tuples = 0 # 표 start
-        self.S_searchtext.setText(self.foodname)
         if self.S_searchtext.toPlainText() != '':
             res = requests.get(api_get.getURL(
                 self.url, self.key, self.S_searchtext.toPlainText()))
@@ -133,6 +130,10 @@ class recipewindow(QDialog, QWidget, form_recipeclass):
 
     def goSearchWindow(self):
         self.close()  # 클릭시 종료됨.
+
+    def pushinfo(self):
+        print(1)
+
 
 
 if __name__ == "__main__":
