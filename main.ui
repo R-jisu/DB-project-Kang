@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>380</width>
+    <width>458</width>
     <height>479</height>
    </rect>
   </property>
@@ -20,8 +20,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>30</y>
+      <x>30</x>
+      <y>40</y>
       <width>281</width>
       <height>21</height>
      </rect>
@@ -250,8 +250,8 @@
    <widget class="QPushButton" name="search">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>30</y>
+      <x>320</x>
+      <y>40</y>
       <width>51</width>
       <height>21</height>
      </rect>
