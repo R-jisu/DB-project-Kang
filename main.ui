@@ -167,7 +167,7 @@
     </item>
     <item row="0" column="1">
      <property name="text">
-      <string>2022.11.11 (3-day)</string>
+      <string>2022.12.16</string>
      </property>
     </item>
     <item row="1" column="0">
@@ -187,7 +187,7 @@
     </item>
     <item row="2" column="1">
      <property name="text">
-      <string>2019.04.02 (dead)</string>
+      <string>2019.04.02</string>
      </property>
     </item>
     <item row="3" column="0">
