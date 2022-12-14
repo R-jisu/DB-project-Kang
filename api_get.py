@@ -47,10 +47,10 @@ def get_bar_cd_URL(endpoint, key, barcode):
 
 # print(getURL(url, key,'양배추'))
 
-res = requests.get(get_bar_cd_URL(url, key,'8801056171032'))
-# res = requests.get(get_rcp_URL(url, key,'김치찌개'))
-# res = requests.get(getURL(url, key,'양배추'))
-info = res.json()
-print(info)
+# res = requests.get(get_bar_cd_URL(url, key,'8801056171032'))
+# # res = requests.get(get_rcp_URL(url, key,'김치찌개'))
+# # res = requests.get(getURL(url, key,'양배추'))
+# info = res.json()
+# print(info)
 # for a in info['COOKRCP01']['row']:
 #   print(a['RCP_NM'])
