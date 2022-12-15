@@ -24,7 +24,7 @@ class WindowClass(QMainWindow, form_mainclass):
         self.search.clicked.connect(self.goSearchWindow)
         self.ADD.clicked.connect(self.ADDFunction)
         self.DELETE.clicked.connect(self.DELFunction)
-        # self.tableWidget.cellDoubleClicked.connect(self.Dday) # cell 내용이 바뀌었을 때 기능 실행
+        self.tableWidget.cellDoubleClicked.connect(self.showDialog) # cell 내용이 바뀌었을 때 기능 실행
         # self.tableWidget.cellChanged.connect(self.Dday)
 
         self.Tuples = 0
@@ -44,6 +44,23 @@ class WindowClass(QMainWindow, form_mainclass):
             self.tableWidget.setItem(
                 self.Tuples, 3, QTableWidgetItem(row[2]))  # 바코드
             self.Tuples += 1
+
+
+    def showDialog(self):
+        if self.tableWidget.currentColumn() == 1 and self.tableWidget.item(self.tableWidget.currentRow(), 0).text():
+            text, ok = QInputDialog.getText(self, '유통기한', '0000.00.00로 입력하세요')
+            if ok:
+                times = text.split('.')
+
+                self.tableWidget.setItem(self.tableWidget.currentRow(), 1, QTableWidgetItem(text))
+
+                Tablecode = self.tableWidget.item(
+                    self.tableWidget.currentRow(), 3).text()
+                cur.execute('update nangbuDB set Dday = ? where barcode = ?', (text, Tablecode,))
+                conn.commit()
+
+                print(str(text))
+
 
         # 현재 날짜 출력
         # print(datetime.now().year,datetime.now().month,datetime.now().day)
