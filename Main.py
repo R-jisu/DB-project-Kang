@@ -133,6 +133,7 @@ class WindowClass(QMainWindow, form_mainclass):
             self.tableWidget.currentRow(), 3).text()
         cur.execute('delete from nangbuDB where barcode = ?', (Tablecode,))
         conn.commit()
+
         self.tableWidget.removeRow(self.tableWidget.currentRow())
 
 
