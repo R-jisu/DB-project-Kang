@@ -16,6 +16,7 @@ class searchwindow(QDialog, QWidget, form_searchclass):
         self.foodname = foodname
         self.S_searchtext.setText(self.foodname)
         self.searching()
+        self.S_tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         self.S_BackBtn.clicked.connect(self.goMainWindow)
         self.S_searchBtn.clicked.connect(self.searching)
