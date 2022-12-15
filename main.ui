@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>541</width>
+    <width>565</width>
     <height>523</height>
    </rect>
   </property>
@@ -38,7 +38,7 @@ background-color: #F3F3F3
      <rect>
       <x>90</x>
       <y>30</y>
-      <width>411</width>
+      <width>441</width>
       <height>21</height>
      </rect>
     </property>
@@ -62,8 +62,8 @@ background-color: #F3F3F3
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>70</y>
-      <width>491</width>
+      <y>60</y>
+      <width>501</width>
       <height>391</height>
      </rect>
     </property>
@@ -114,11 +114,14 @@ border: 2px solid #F3F3F3;
     <property name="showGrid">
      <bool>true</bool>
     </property>
+    <property name="gridStyle">
+     <enum>Qt::SolidLine</enum>
+    </property>
     <property name="sortingEnabled">
      <bool>false</bool>
     </property>
     <property name="cornerButtonEnabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="rowCount">
      <number>30</number>
@@ -304,8 +307,8 @@ border: 2px solid #F3F3F3;
    <widget class="QPushButton" name="ADD">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>480</y>
+      <x>360</x>
+      <y>460</y>
       <width>80</width>
       <height>23</height>
      </rect>
@@ -320,8 +323,8 @@ border: 2px solid #F3F3F3;
    <widget class="QPushButton" name="DELETE">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>480</y>
+      <x>450</x>
+      <y>460</y>
       <width>80</width>
       <height>23</height>
      </rect>
@@ -333,9 +336,9 @@ border: 2px solid #F3F3F3;
    <widget class="QTextEdit" name="textEdit">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>480</y>
-      <width>291</width>
+      <x>190</x>
+      <y>460</y>
+      <width>161</width>
       <height>21</height>
      </rect>
     </property>
