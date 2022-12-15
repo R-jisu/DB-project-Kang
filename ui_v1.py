@@ -9,8 +9,8 @@ import requests
 import sqlite3
 
 
-con = sqlite3.connect('./nangbuDB.db')
-cur = con.cursor()
+conn = sqlite3.connect('./nangbuDB.db')
+cur = conn.cursor()
 # UI파일 연결
 # 단, UI파일은 Python 코드 파일과 같은 디렉토리에 위치해야한다.
 form_searchclass = uic.loadUiType("search.ui")[0]
@@ -27,6 +27,8 @@ class WindowClass(QMainWindow, form_mainclass):
         self.search.clicked.connect(self.goSearchWindow)
         self.ADD.clicked.connect(self.ADDFunction)
         self.DELETE.clicked.connect(self.DELFunction)
+        #self.tableWidget.cellDoubleClicked.connect(self.Dday) # cell 내용이 바뀌었을 때 기능 실행
+        #self.tableWidget.cellChanged.connect(self.Dday)
 
         self.Tuples = 0
         
@@ -35,13 +37,21 @@ class WindowClass(QMainWindow, form_mainclass):
         self.row_count = self.tableWidget.rowCount()
 
         self.cur = cur
+        self.conn = conn
+
+
+        self.flag = 0
+        
+
         cur.execute('SELECT * FROM nangbuDB')
         for row in cur:
             print(row)
 
-            self.tableWidget.setItem(0, 0, QTableWidgetItem(row[0]))
-            self.tableWidget.setItem(0, 1, QTableWidgetItem(row[3]))
-            self.tableWidget.setItem(0, 2, QTableWidgetItem(row[1]))
+            self.tableWidget.setItem(self.Tuples, 0, QTableWidgetItem(row[0]))
+            self.tableWidget.setItem(self.Tuples, 1, QTableWidgetItem(row[3]))
+            self.tableWidget.setItem(self.Tuples, 2, QTableWidgetItem(row[1]))
+            self.tableWidget.setItem(self.Tuples, 3, QTableWidgetItem(row[2])) # 바코드
+            self.Tuples+=1
 
         #현재 날짜 출력
         #print(datetime.now().year,datetime.now().month,datetime.now().day)
@@ -77,11 +87,16 @@ class WindowClass(QMainWindow, form_mainclass):
                 #                 else:
                 #                     self.tableWidget.setItem(x, 1,
                 #                         QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-' + str(int(days[2]) - datetime.now().day) + ')'))
-        # dksl
-        # self.tableWidget.item(0, 0).setBackground(QtGui.QColor(255, 100, 100))
+        
 
-        #self.tableWidget.item(self.tableWidget.currentRow(),self.tableWidget.currentColumn()).text()
-        #self.tableWidget.item(0, 0).setBackground(QtGui.QColor(255, 100, 100))
+
+    # def Dday(self):
+    #     print('change')
+        
+        #self.tableWidget.currentRow()
+        #self.tableWidget.currentColumn()
+
+
 
     def goSearchWindow(self):
         self.hide()  # 메인윈도우 숨김
@@ -94,16 +109,40 @@ class WindowClass(QMainWindow, form_mainclass):
         # ADD 버튼 눌릴 시
         # self.tableWidget.item(self.tableWidget.currentRow(),self.tableWidget.currentColumn()).text()
         # print(self.tableWidget.item(self.tableWidget.currentRow(),self.tableWidget.currentColumn()).text())
-        input("바코드를 입력하세요 : ")
-        res = requests.get(api_get.get_bar_cd_URL(api_get.url, api_get.key, '8801056171032'))
-        info = res.json()
-        print(info)
+        
+        if (self.textEdit.toPlainText()):
+            print(self.textEdit.toPlainText())
+            
+            res = requests.get(api_get.get_bar_cd_URL(api_get.url, api_get.key, self.textEdit.toPlainText()))
+            info = res.json()
+            # print(info)
 
+            if info['C005']['total_count'] != '0':
+                for a in info['C005']['row']:
+                    print(a['PRDLST_NM']) # 제품 이름
+                    print(a['BAR_CD']) # 바코드
+                    print(a['POG_DAYCNT']) # 제조일자
+                    mydata = (a['PRDLST_NM'], a['POG_DAYCNT'], a['BAR_CD'], '')
+
+                cur.execute('INSERT into nangbuDB VALUES (?,?,?,?);', mydata)
+
+                conn.commit()
+
+                self.tableWidget.setItem(self.Tuples, 0, QTableWidgetItem(a['PRDLST_NM']))
+                self.tableWidget.setItem(self.Tuples, 2, QTableWidgetItem(a['POG_DAYCNT']))
+                self.tableWidget.setItem(self.Tuples, 3, QTableWidgetItem(a['BAR_CD'])) # 바코드
+                self.Tuples += 1
+
+            else:
+                print("바코드 정보가 없습니다")
+            self.textEdit.setText('')
+
+            
         # self.tableWidget.setItem(
         #     self.Tuples, 0, QTableWidgetItem(str(self.Tuples)))
         # self.tableWidget.setItem(
         #     self.Tuples, 1, QTableWidgetItem(str(self.Tuples)))
-        # self.Tuples += 1
+        
 
     def DELFunction(self):
         print("del")
@@ -111,6 +150,14 @@ class WindowClass(QMainWindow, form_mainclass):
         self.Tuples -= 1
         # self.tableWidget.takeItem(self.Tuples, 0)
         # self.tableWidget.takeItem(self.Tuples, 1)
+
+        Tablecode = self.tableWidget.item(self.tableWidget.currentRow(), 3).text()
+        print(Tablecode)
+
+        cur.execute('delete from nangbuDB where barcode = ?', (Tablecode,))
+        conn.commit()
+
+
         self.tableWidget.removeRow(self.tableWidget.currentRow())
         # self.tableWidget.removeRow(self.tableWidget.currentRow())
 
