@@ -53,6 +53,9 @@ class searchwindow(QDialog, QWidget, form_searchclass):
         self.Tuples = 0  # 표 start
         ingredient = self.S_searchtext.toPlainText().strip('\n')
         if ingredient != '':
+            if '%' in ingredient:
+                self.wrongQmessageBox("값이 잘못되었습니다.")
+                return
             if len(ingredient) == 1 and (ord(ingredient) > 32 and ord(ingredient) < 127):
                 self.wrongQmessageBox("값이 잘못되었습니다.")
                 return

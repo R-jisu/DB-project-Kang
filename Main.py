@@ -199,11 +199,16 @@ class WindowClass(QMainWindow, form_mainclass):
         self.searchtext.setText('')
 
     def goSearchWindow(self):
-        ingredient = self.searchtext.toPlainText()
+        ingredient = self.searchtext.toPlainText().strip('\n')
         # 특수기호, 알파벳 입력한 경우
         if len(ingredient) == 1 and (ord(ingredient) > 32 and ord(ingredient) < 127):
             self.wrongQmessageBox("값이 잘못되었습니다.")
             return
+
+        if '%' in ingredient:
+            self.wrongQmessageBox("값이 잘못되었습니다.")
+            return
+
         # 재료명을 입력하지 않은 경우
         if ingredient == '' or ingredient == '재료':
             self.wrongQmessageBox("값이 잘못되었습니다.")
@@ -224,19 +229,25 @@ class WindowClass(QMainWindow, form_mainclass):
 
     def ADDFunction(self):
         # ADD 버튼 눌릴 시
-        if (self.textEdit.toPlainText()):
-            # user가 입력한 바코드가 이미 있는 경우
+        barcodestrip = self.textEdit.toPlainText().strip('\n')
+        if (barcodestrip):
             if self.Tuples >= 30:
                 self.tableWidget.setRowCount(self.Tuples+1)
 
+            if '%' in barcodestrip:
+                QMessageBox.information(self, "닫기", "잘못된 정보입니다.")
+                self.textEdit.setText('')
+                return
+
+            # user가 입력한 바코드가 이미 있는 경우
             for idex in range(self.Tuples):
-                if self.textEdit.toPlainText() == self.tableWidget.item(idex, 3).text():
+                if barcodestrip == self.tableWidget.item(idex, 3).text():
                     QMessageBox.information(self, "닫기", "이미 입력한 정보입니다.")
                     self.textEdit.setText('')
                     return
             # 바코드 api
             res = requests.get(api_get.get_bar_cd_URL(
-                api_get.url, api_get.key, self.textEdit.toPlainText()))
+                api_get.url, api_get.key, barcodestrip))
             info = res.json()
 
             if info['C005']['total_count'] != '0':
