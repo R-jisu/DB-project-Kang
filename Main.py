@@ -128,12 +128,13 @@ class WindowClass(QMainWindow, form_mainclass):
             self.textEdit.setText('')
 
     def DELFunction(self):
-        self.Tuples -= 1
-        Tablecode = self.tableWidget.item(
-            self.tableWidget.currentRow(), 3).text()
-        cur.execute('delete from nangbuDB where barcode = ?', (Tablecode,))
-        conn.commit()
-        self.tableWidget.removeRow(self.tableWidget.currentRow())
+        if self.tableWidget.item(self.tableWidget.currentRow(), 3):
+            self.Tuples -= 1
+            Tablecode = self.tableWidget.item(
+                self.tableWidget.currentRow(), 3).text()
+            cur.execute('delete from nangbuDB where barcode = ?', (Tablecode,))
+            conn.commit()
+            self.tableWidget.removeRow(self.tableWidget.currentRow())
 
 
 if __name__ == "__main__":
