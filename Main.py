@@ -38,11 +38,17 @@ class WindowClass(QMainWindow, form_mainclass):
         self.Tuples = 0
         cur.execute('SELECT * FROM nangbuDB order by Dday')
         for row in cur:
+            if self.Tuples >= 30:
+                self.row_count += 1
+                self.tableWidget.setRowCount(self.Tuples+1)
+
             self.tableWidget.setItem(self.Tuples, 0, QTableWidgetItem(row[0]))
             self.tableWidget.setItem(self.Tuples, 1, QTableWidgetItem(row[3]))
             self.tableWidget.setItem(self.Tuples, 2, QTableWidgetItem(row[1]))
             self.tableWidget.setItem(
                 self.Tuples, 3, QTableWidgetItem(row[2]))  # 바코드
+
+
             self.Tuples += 1
 
         self.initializeDday()
@@ -187,7 +193,7 @@ class WindowClass(QMainWindow, form_mainclass):
             QtGui.QColor(255, 255, 255))
 
     def goSearchWindow(self):
-        ingredient = self.searchtext.toPlainText().strip('\n')
+        ingredient = self.searchtext.toPlainText()
         if ingredient == '' or ingredient == '재료':  # 재료명을 입력하지 않은 경우
             QMessageBox.information(self, "닫기", "값을 입력해주세요.")
             self.searchtext.setText('')
@@ -202,7 +208,7 @@ class WindowClass(QMainWindow, form_mainclass):
                 return
 
         WindowClass().close()  # 메인윈도우 숨김
-        self.search = Search.searchwindow(ingredient)
+        self.search = Search.searchwindow(self.searchtext.toPlainText())
         self.search.exec()  # search 창 닫을 때까지 기다림
         self.searchtext.setText('')
         WindowClass().show()  # search 창을 닫으면 다시 첫 번째 창이 보여짐
@@ -211,6 +217,9 @@ class WindowClass(QMainWindow, form_mainclass):
         # ADD 버튼 눌릴 시
         if (self.textEdit.toPlainText()):
             # user가 입력한 바코드가 이미 있는 경우
+            if self.Tuples >= 30:
+                self.tableWidget.setRowCount(self.Tuples+1)
+
             for idex in range(self.Tuples):
                 if self.textEdit.toPlainText() == self.tableWidget.item(idex, 3).text():
                     self.textEdit.setText('')
@@ -227,25 +236,33 @@ class WindowClass(QMainWindow, form_mainclass):
                 cur.execute('INSERT into nangbuDB VALUES (?,?,?,?);', mydata)
                 conn.commit()
 
+                
+
                 self.tableWidget.setItem(
                     self.Tuples, 0, QTableWidgetItem(a['PRDLST_NM']))
                 self.tableWidget.setItem(
                     self.Tuples, 2, QTableWidgetItem(a['POG_DAYCNT']))
                 self.tableWidget.setItem(
                     self.Tuples, 3, QTableWidgetItem(a['BAR_CD']))  # 바코드
-                self.Tuples += 1
+
+                
+                self.Tuples+=1
             else:
                 QMessageBox.information(self, "닫기", "없는 정보입니다.")
             self.textEdit.setText('')
 
     def DELFunction(self):
         if self.tableWidget.item(self.tableWidget.currentRow(), 3):
+            
             self.Tuples -= 1
             Tablecode = self.tableWidget.item(
                 self.tableWidget.currentRow(), 3).text()
             cur.execute('delete from nangbuDB where barcode = ?', (Tablecode,))
             conn.commit()
             self.tableWidget.removeRow(self.tableWidget.currentRow())
+            if self.Tuples < 30:
+                self.tableWidget.setRowCount(self.Tuples+1)
+
 
 
 if __name__ == "__main__":
