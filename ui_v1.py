@@ -9,7 +9,6 @@ import api_get
 import requests
 import sqlite3
 
-
 conn = sqlite3.connect('./nangbuDB.db')
 cur = conn.cursor()
 # UI파일 연결
@@ -148,8 +147,6 @@ class WindowClass(QMainWindow, form_mainclass):
         print("del")
         # DEL 버튼 눌릴 시
         self.Tuples -= 1
-        # self.tableWidget.takeItem(self.Tuples, 0)
-        # self.tableWidget.takeItem(self.Tuples, 1)
 
         Tablecode = self.tableWidget.item(
             self.tableWidget.currentRow(), 3).text()
@@ -181,11 +178,11 @@ class searchwindow(QDialog, QWidget, form_searchclass):
         self.setupUi(self)
 
     def goRecipeWindow(self):
-        searchwindow(self.foodname).close()  # 윈도우 숨김
+        searchwindow(self.foodname).close()
         choicefood = self.S_tableWidget.item(
             self.S_tableWidget.currentRow(), 0).text()
         self.recipe = recipewindow(foodtitle=choicefood)
-        self.recipe.exec()  # recipe 창 닫을 때까지 기다림
+        self.recipe.exec()
         searchwindow(self.foodname).show()  # recipe 창을 닫으면 다시 첫 번째 창이 보여짐
 
     def goMainWindow(self):
@@ -201,14 +198,6 @@ class searchwindow(QDialog, QWidget, form_searchclass):
                 self.S_tableWidget.setItem(
                     self.Tuples, 0, QTableWidgetItem(a['RCP_NM']))  # 행 열 데이터
                 self.Tuples += 1  # 위에부터 표 채우기
-        else:
-            print("noThing")
-
-    def table_doubleClicked(self):
-        row = self.S_tableWidget.currentIndex().row()
-        column = self.S_tableWidget.currentIndex().column()
-        print(row, column)
-        # 새 창 생성
 
 
 class recipewindow(QDialog, QWidget, form_recipeclass):

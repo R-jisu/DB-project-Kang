@@ -52,7 +52,7 @@ background-color: #F3F3F3
    </property>
    <property name="styleSheet">
     <string notr="true">QLabel{
-background-color:#F3F3F3;
+background-color:#EEEEEE;
 border: 1px solid #F3F3F3;
 border-radius: 25px;
 }</string>
@@ -110,7 +110,7 @@ border-radius: 25px;
      <x>50</x>
      <y>130</y>
      <width>441</width>
-     <height>101</height>
+     <height>91</height>
     </rect>
    </property>
    <property name="font">
@@ -120,6 +120,12 @@ border-radius: 25px;
    </property>
    <property name="autoFillBackground">
     <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+border: 1px solid #EEEEEE;
+background-color: rgb(255,255,255);
+}</string>
    </property>
    <property name="text">
     <string/>
