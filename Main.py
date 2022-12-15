@@ -48,7 +48,6 @@ class WindowClass(QMainWindow, form_mainclass):
             self.tableWidget.setItem(
                 self.Tuples, 3, QTableWidgetItem(row[2]))  # 바코드
 
-
             self.Tuples += 1
 
         self.initializeDday()
@@ -192,19 +191,26 @@ class WindowClass(QMainWindow, form_mainclass):
         self.tableWidget.item(x, 0).setBackground(
             QtGui.QColor(255, 255, 255))
 
+    def wrongQmessageBox(self, text):
+        QMessageBox.information(self, "닫기", text)
+        self.searchtext.setText('')
+
     def goSearchWindow(self):
         ingredient = self.searchtext.toPlainText()
-        if ingredient == '' or ingredient == '재료':  # 재료명을 입력하지 않은 경우
-            QMessageBox.information(self, "닫기", "값을 입력해주세요.")
-            self.searchtext.setText('')
+        # 특수기호, 알파벳 입력한 경우
+        if len(ingredient) == 1 and (ord(ingredient) > 32 and ord(ingredient) < 127):
+            self.wrongQmessageBox("값이 잘못되었습니다.")
+            return
+        # 재료명을 입력하지 않은 경우
+        if ingredient == '' or ingredient == '재료':
+            self.wrongQmessageBox("값이 잘못되었습니다.")
             return
         else:  # 재료명이 잘못되었을 경우
             res = requests.get(api_get.getURL(
                 api_get.url, api_get.key, ingredient))
             recipe = res.json()
             if recipe['COOKRCP01']['total_count'] == '0':
-                QMessageBox.information(self, "닫기", "해당 재료의 레시피가 없습니다.")
-                self.searchtext.setText('')
+                self.wrongQmessageBox("해당 재료의 레시피가 없습니다.")
                 return
 
         WindowClass().close()  # 메인윈도우 숨김
@@ -222,8 +228,7 @@ class WindowClass(QMainWindow, form_mainclass):
 
             for idex in range(self.Tuples):
                 if self.textEdit.toPlainText() == self.tableWidget.item(idex, 3).text():
-                    self.textEdit.setText('')
-                    QMessageBox.information(self, "닫기", "이미 입력한 정보입니다.")
+                    self.wrongQmessageBox("이미 입력한 정보입니다.")
                     return
             # 바코드 api
             res = requests.get(api_get.get_bar_cd_URL(
@@ -236,8 +241,6 @@ class WindowClass(QMainWindow, form_mainclass):
                 cur.execute('INSERT into nangbuDB VALUES (?,?,?,?);', mydata)
                 conn.commit()
 
-                
-
                 self.tableWidget.setItem(
                     self.Tuples, 0, QTableWidgetItem(a['PRDLST_NM']))
                 self.tableWidget.setItem(
@@ -245,15 +248,13 @@ class WindowClass(QMainWindow, form_mainclass):
                 self.tableWidget.setItem(
                     self.Tuples, 3, QTableWidgetItem(a['BAR_CD']))  # 바코드
 
-                
-                self.Tuples+=1
+                self.Tuples += 1
             else:
                 QMessageBox.information(self, "닫기", "없는 정보입니다.")
             self.textEdit.setText('')
 
     def DELFunction(self):
         if self.tableWidget.item(self.tableWidget.currentRow(), 3):
-            
             self.Tuples -= 1
             Tablecode = self.tableWidget.item(
                 self.tableWidget.currentRow(), 3).text()
@@ -261,8 +262,7 @@ class WindowClass(QMainWindow, form_mainclass):
             conn.commit()
             self.tableWidget.removeRow(self.tableWidget.currentRow())
             if self.Tuples < 30:
-                self.tableWidget.setRowCount(self.Tuples+1)
-
+                self.tableWidget.setRowCount(30)
 
 
 if __name__ == "__main__":
