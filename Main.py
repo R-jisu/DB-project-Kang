@@ -45,68 +45,115 @@ class WindowClass(QMainWindow, form_mainclass):
                 self.Tuples, 3, QTableWidgetItem(row[2]))  # 바코드
             self.Tuples += 1
 
+        for x in range(self.Tuples):
+            #print(self.tableWidget.item(0, 1).text(), x)
+            if self.tableWidget.item(x, 1): # 재료를 표에 저장한 상태일 때, 빈 칸이 아닐 때
+
+                days = self.tableWidget.item(x, 1).text().split('.')
+                #print(days[0], days[1], days[2])
+                if int(days[0]) < datetime.now().year: #1년 이상 지남 -> 죽음
+                    self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
+                    self.tableWidget.setItem(x, 1,
+                            QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
+                elif int(days[0]) == datetime.now().year: #같은 년도일 때
+                    if int(days[1]) < datetime.now().month: # 1달 이상 지남 -> 죽음
+                        self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
+                        self.tableWidget.setItem(x, 1,
+                            QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
+
+                    elif int(days[1]) == datetime.now().month:# 같은 달일때
+                        if int(days[2]) < datetime.now().day: #하루 이상 지남 -> 죽음
+                            self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
+                            self.tableWidget.setItem(x, 1,
+                                QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
+                        elif int(days[2]) >= datetime.now().day:
+
+                            if (int(days[2]) - datetime.now().day) <= 5: #5일 이내로 남음, 핑크색
+                                self.tableWidget.item(x, 0).setBackground(QtGui.QColor(255, 170, 170))
+                                if (int(days[2]) - datetime.now().day) == 0:
+                                    self.tableWidget.setItem(x, 1,
+                                        QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-day)'))
+                                else:
+                                    self.tableWidget.setItem(x, 1,
+                                        QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-' + str(int(days[2]) - datetime.now().day) + ')'))
+
 
     def showDialog(self):
         if self.tableWidget.currentColumn() == 1 and self.tableWidget.item(self.tableWidget.currentRow(), 0).text():
             text, ok = QInputDialog.getText(self, '유통기한', '0000.00.00로 입력하세요')
             if ok:
                 times = text.split('.')
+                
+                if len(times) != 3:
+                    print('양식이 잘못되었습니다')
+                else:
+                    if len(times[0]) != 4 or len(times[1]) != 2 or len(times[2]) != 2:
+                        print('숫자는 0000.00.00 형태로 넣으셔야 합니다')
+                    else:
 
-                self.tableWidget.setItem(self.tableWidget.currentRow(), 1, QTableWidgetItem(text))
+                        if times[0].isdigit() == False or times[1].isdigit() == False or times[2].isdigit() == False:
+                            print('날짜에는 숫자만 넣으실 수 있습니다')
+                        else:
+                            if int(times[1]) >= 13 or int(times[2]) >= 32:
+                                print('달과 날짜의 입력이 잘못됐습니다')
+                            else:
+                                self.tableWidget.setItem(self.tableWidget.currentRow(), 1, QTableWidgetItem(text))
 
-                Tablecode = self.tableWidget.item(
-                    self.tableWidget.currentRow(), 3).text()
-                cur.execute('update nangbuDB set Dday = ? where barcode = ?', (text, Tablecode,))
-                conn.commit()
+                                Tablecode = self.tableWidget.item(
+                                    self.tableWidget.currentRow(), 3).text()
+                                cur.execute('update nangbuDB set Dday = ? where barcode = ?', (text, Tablecode,))
+                                conn.commit()
 
-                print(str(text))
+                                print(str(text))
 
 
         # 현재 날짜 출력
         # print(datetime.now().year,datetime.now().month,datetime.now().day)
-        # for x in range(self.row_count):
-            #print(self.tableWidget.item(0, 1).text(), x)
-            # if self.tableWidget.item(x, 1): # 재료를 표에 저장한 상태일 때, 빈 칸이 아닐 때
 
-            # days = self.tableWidget.item(x, 1).text().split('.')
-            # #print(days[0], days[1], days[2])
+        x = self.tableWidget.currentRow()
 
-            # if int(days[0]) < datetime.now().year: #1년 이상 지남 -> 죽음
-            #     self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
-            #     self.tableWidget.setItem(x, 1,
-            #             QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
-            # elif int(days[0]) == datetime.now().year: #같은 년도일 때
-            #     if int(days[1]) < datetime.now().month: # 1달 이상 지남 -> 죽음
-            #         self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
-            #         self.tableWidget.setItem(x, 1,
-            #             QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
+        if int(times[0]) < datetime.now().year: #1년 이상 지남 -> 죽음
+            self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
+            self.tableWidget.setItem(x, 1,
+                    QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
+        elif int(times[0]) == datetime.now().year: #같은 년도일 때
+            if int(times[1]) < datetime.now().month: # 1달 이상 지남 -> 죽음
+                self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
+                self.tableWidget.setItem(x, 1,
+                    QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
 
-            #     elif int(days[1]) == datetime.now().month:# 같은 달일때
-            #         if int(days[2]) < datetime.now().day: #하루 이상 지남 -> 죽음
-            #             self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
-            #             self.tableWidget.setItem(x, 1,
-            #                 QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
-            #         elif int(days[2]) >= datetime.now().day:
+            elif int(times[1]) == datetime.now().month:# 같은 달일때
+                if int(times[2]) < datetime.now().day: #하루 이상 지남 -> 죽음
+                    self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
+                    self.tableWidget.setItem(x, 1,
+                        QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
+                elif int(times[2]) >= datetime.now().day:
 
-            #             if (int(days[2]) - datetime.now().day) <= 5: #5일 이내로 남음, 핑크색
-            #                 self.tableWidget.item(x, 0).setBackground(QtGui.QColor(255, 170, 170))
-            #                 if (int(days[2]) - datetime.now().day) == 0:
-            #                     self.tableWidget.setItem(x, 1,
-            #                         QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-day)'))
-            #                 else:
-            #                     self.tableWidget.setItem(x, 1,
-            #                         QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-' + str(int(days[2]) - datetime.now().day) + ')'))
+                    if (int(times[2]) - datetime.now().day) <= 5: #5일 이내로 남음, 핑크색
+                        self.tableWidget.item(x, 0).setBackground(QtGui.QColor(255, 170, 170))
+                        if (int(times[2]) - datetime.now().day) == 0:
+                            self.tableWidget.setItem(x, 1,
+                                QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-day)'))
+                        else:
+                            self.tableWidget.setItem(x, 1,
+                                QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-' + str(int(times[2]) - datetime.now().day) + ')'))
 
-    # def Dday(self):
-    #     print('change')
-
-        # self.tableWidget.currentRow()
-        # self.tableWidget.currentColumn()
 
     def goSearchWindow(self):
-        if self.searchtext.toPlainText() == '':
+        ingredient = self.searchtext.toPlainText()
+        if ingredient == '' or ingredient == '재료':  # 재료명을 입력하지 않은 경우
             QMessageBox.information(self, "닫기", "값을 입력해주세요.")
+            self.searchtext.setText('')
             return
+        else:  # 재료명이 잘못되었을 경우
+            res = requests.get(api_get.getURL(
+                api_get.url, api_get.key, ingredient))
+            recipe = res.json()
+            if recipe['COOKRCP01']['total_count'] == '0':
+                QMessageBox.information(self, "닫기", "해당 재료의 레시피가 없습니다.")
+                self.searchtext.setText('')
+                return
+
         WindowClass().close()  # 메인윈도우 숨김
         self.search = Search.searchwindow(self.searchtext.toPlainText())
         self.search.exec()  # search 창 닫을 때까지 기다림

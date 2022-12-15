@@ -48,10 +48,16 @@ class searchwindow(QDialog, QWidget, form_searchclass):
         if self.S_searchtext.toPlainText() != '':
             res = requests.get(api_get.getURL(
                 api_get.url, api_get.key, self.S_searchtext.toPlainText()))
-            self.recipe = res.json()
-            for a in self.recipe['COOKRCP01']['row']:
-                self.S_tableWidget.setItem(
-                    self.Tuples, 0, QTableWidgetItem(a['RCP_NM']))  # 행 열 데이터
-                self.Tuples += 1  # 위에부터 표 채우기
-        else:
+            recipe = res.json()
+
+            if recipe['COOKRCP01']['total_count'] == '0':
+                QMessageBox.information(self, "닫기", "해당 재료의 레시피가 없습니다.")
+                self.S_searchtext.setText('')
+            else:
+                for a in recipe['COOKRCP01']['row']:
+                    self.S_tableWidget.setItem(
+                        self.Tuples, 0, QTableWidgetItem(a['RCP_NM']))  # 행 열 데이터
+                    self.Tuples += 1  # 위에부터 표 채우기
+        elif self.S_searchtext.toPlainText() == '' or self.S_searchtext.toPlainText() == '재료':
+            self.searchtext.setText('')
             QMessageBox.information(self, "닫기", "값을 입력해주세요.")
