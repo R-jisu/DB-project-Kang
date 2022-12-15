@@ -101,7 +101,7 @@ class WindowClass(QMainWindow, form_mainclass):
         self.initializeDday()
 
     def showDialog(self):
-        if self.tableWidget.currentColumn() == 1 and self.tableWidget.item(self.tableWidget.currentRow(), 0).text():
+        if self.tableWidget.currentColumn() == 1 and self.tableWidget.item(self.tableWidget.currentRow(), 3):
             text, ok = QInputDialog.getText(self, '유통기한', '0000.00.00로 입력하세요')
             if ok:
                 if text == '':
@@ -187,7 +187,7 @@ class WindowClass(QMainWindow, form_mainclass):
             QtGui.QColor(255, 255, 255))
 
     def goSearchWindow(self):
-        ingredient = self.searchtext.toPlainText()
+        ingredient = self.searchtext.toPlainText().strip('\n')
         if ingredient == '' or ingredient == '재료':  # 재료명을 입력하지 않은 경우
             QMessageBox.information(self, "닫기", "값을 입력해주세요.")
             self.searchtext.setText('')
@@ -202,7 +202,7 @@ class WindowClass(QMainWindow, form_mainclass):
                 return
 
         WindowClass().close()  # 메인윈도우 숨김
-        self.search = Search.searchwindow(self.searchtext.toPlainText())
+        self.search = Search.searchwindow(ingredient)
         self.search.exec()  # search 창 닫을 때까지 기다림
         self.searchtext.setText('')
         WindowClass().show()  # search 창을 닫으면 다시 첫 번째 창이 보여짐
