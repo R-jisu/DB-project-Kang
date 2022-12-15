@@ -52,6 +52,7 @@ class WindowClass(QMainWindow, form_mainclass):
 
         self.initializeDday()
 
+    # Dday 계산
     def initializeDday(self):
         for x in range(self.Tuples):
             # 재료를 표에 저장한 상태일 때, 빈 칸이 아닐 때
@@ -85,6 +86,7 @@ class WindowClass(QMainWindow, form_mainclass):
                                     self.tableWidget.setItem(x, 1,
                                                              QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-' + str(int(days[2]) - datetime.now().day) + ')'))
 
+    # Dday따라 sorting 수정 값 바로 갱신
     def sorting(self):
         for i in range(self.Tuples):
             self.tableWidget.takeItem(i, 0)
@@ -105,6 +107,7 @@ class WindowClass(QMainWindow, form_mainclass):
 
         self.initializeDday()
 
+    # Dday format 및 계산
     def showDialog(self):
         if self.tableWidget.currentColumn() == 1 and self.tableWidget.item(self.tableWidget.currentRow(), 3):
             text, ok = QInputDialog.getText(self, '유통기한', '0000.00.00로 입력하세요')

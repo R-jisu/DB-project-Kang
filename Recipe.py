@@ -23,6 +23,7 @@ class recipewindow(QDialog, QWidget, form_recipeclass):
     def goSearchWindow(self):
         self.close()  # 클릭시 종료됨.
 
+    # 레시피 상세정보 표시
     def pushinfo(self):
         self.title.setText(self.foodtitle)
         # 요리 레시피 info 출력

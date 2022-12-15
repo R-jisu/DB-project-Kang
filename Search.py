@@ -48,6 +48,7 @@ class searchwindow(QDialog, QWidget, form_searchclass):
         QMessageBox.information(self, "닫기", text)
         self.S_searchtext.setText('')
 
+    # 재료가 들어가는 요리 리스트 검색
     def searching(self):
         self.Tuples = 0  # 표 start
         ingredient = self.S_searchtext.toPlainText().strip('\n')
