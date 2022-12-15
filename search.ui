@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>SearchWindow</class>
+ <widget class="QDialog" name="SearchWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>581</width>
-    <height>662</height>
+    <width>541</width>
+    <height>523</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog{
+background-color: rgb(255,255,255);
+}
+
+QPushButton:hover {
+background-color:  #F3F3F3;
+}
+
+QTextEdit:hover{
+background-color: #F3F3F3
+}</string>
   </property>
   <widget class="QTextEdit" name="S_searchtext">
    <property name="enabled">
@@ -19,9 +32,9 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>20</y>
-     <width>251</width>
+     <x>130</x>
+     <y>10</y>
+     <width>291</width>
      <height>21</height>
     </rect>
    </property>
@@ -38,8 +51,8 @@
   <widget class="QPushButton" name="S_searchBtn">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>20</y>
+     <x>430</x>
+     <y>10</y>
      <width>51</width>
      <height>21</height>
     </rect>
@@ -48,15 +61,15 @@
     <string>검색</string>
    </property>
   </widget>
-  <widget class="QTableWidget" name="tableWidget">
+  <widget class="QTableWidget" name="S_tableWidget">
    <property name="enabled">
     <bool>true</bool>
    </property>
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>50</y>
-     <width>351</width>
+     <x>80</x>
+     <y>40</y>
+     <width>401</width>
      <height>571</height>
     </rect>
    </property>
@@ -69,6 +82,11 @@
    <property name="autoFillBackground">
     <bool>false</bool>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QTableWidget{
+border: 2px solid #F3F3F3;
+}</string>
+   </property>
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
@@ -80,6 +98,9 @@
    </property>
    <property name="alternatingRowColors">
     <bool>false</bool>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectRows</enum>
    </property>
    <property name="showGrid">
     <bool>true</bool>
@@ -107,6 +128,9 @@
    </attribute>
    <attribute name="verticalHeaderCascadingSectionResizes">
     <bool>false</bool>
+   </attribute>
+   <attribute name="verticalHeaderDefaultSectionSize">
+    <number>38</number>
    </attribute>
    <row>
     <property name="text">
@@ -201,8 +225,8 @@
   <widget class="QPushButton" name="S_BackBtn">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>20</y>
+     <x>80</x>
+     <y>10</y>
      <width>41</width>
      <height>23</height>
     </rect>
@@ -217,7 +241,7 @@
   <connection>
    <sender>S_BackBtn</sender>
    <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>SearchWindow</receiver>
    <slot>goMainWindow()</slot>
    <hints>
     <hint type="sourcelabel">

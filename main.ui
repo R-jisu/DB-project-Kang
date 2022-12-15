@@ -13,6 +13,19 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow{
+background-color: rgb(255,255,255);
+}
+
+QPushButton:hover {
+background-color:  #F3F3F3;
+}
+
+QTextEdit:hover{
+background-color: #F3F3F3
+}</string>
+  </property>
   <property name="toolButtonStyle">
    <enum>Qt::ToolButtonIconOnly</enum>
   </property>
@@ -25,9 +38,12 @@
      <rect>
       <x>90</x>
       <y>30</y>
-      <width>431</width>
+      <width>411</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Plain</enum>
@@ -62,6 +78,11 @@
     </property>
     <property name="autoFillBackground">
      <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTableWidget{
+border: 2px solid #F3F3F3;
+}</string>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
@@ -289,6 +310,9 @@
       <height>23</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <property name="text">
      <string>ADD</string>
     </property>
@@ -311,7 +335,7 @@
      <rect>
       <x>30</x>
       <y>480</y>
-      <width>251</width>
+      <width>291</width>
       <height>21</height>
      </rect>
     </property>

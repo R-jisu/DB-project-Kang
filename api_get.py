@@ -6,39 +6,39 @@ import json
 
 url = 'https://openapi.foodsafetykorea.go.kr/api'
 
-#keyId/serviceId/dataType/startIdx/endIdx
+# keyId/serviceId/dataType/startIdx/endIdx
 key = '56bdaba970084b289ebc'
+
 
 def getURL(endpoint, key, ingredient):
 
-    
-    url = f"{endpoint}/{key}/COOKRCP01/json/1/5/RCP_PARTS_DTLS={ingredient}"
-    
-    #RCP_PARTS_DTLS={ingredient}
-    #print(url)
+    url = f"{endpoint}/{key}/COOKRCP01/json/1/100/RCP_PARTS_DTLS={ingredient}"
+
+    # RCP_PARTS_DTLS={ingredient}
+    # print(url)
     # res = requests.get(url, headers=header)
     # return res
 
     return url
 
-def get_rcp_URL(endpoint, key, ingredient):
 
-    
-    url = f"{endpoint}/{key}/COOKRCP01/json/1/5/RCP_NM={ingredient}"
-    
-    #RCP_PARTS_DTLS={ingredient}
-    #print(url)
+def get_rcp_URL(endpoint, key, foodtitle):
+
+    url = f"{endpoint}/{key}/COOKRCP01/json/1/5/RCP_NM={foodtitle}"
+
+    # RCP_PARTS_DTLS={ingredient}
+    # print(url)
     # res = requests.get(url, headers=header)
     # return res
 
     return url
+
 
 def get_bar_cd_URL(endpoint, key, barcode):
 
-    
     url = f"{endpoint}/{key}/C005/json/1/1/BAR_CD={barcode}"
-    
-    #RCP_PARTS_DTLS={ingredient}
+
+    # RCP_PARTS_DTLS={ingredient}
     print(url)
     # res = requests.get(url, headers=header)
     # return res
