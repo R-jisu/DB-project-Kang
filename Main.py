@@ -228,7 +228,8 @@ class WindowClass(QMainWindow, form_mainclass):
 
             for idex in range(self.Tuples):
                 if self.textEdit.toPlainText() == self.tableWidget.item(idex, 3).text():
-                    self.wrongQmessageBox("이미 입력한 정보입니다.")
+                    QMessageBox.information(self, "닫기", "이미 입력한 정보입니다.")
+                    self.textEdit.setText('')
                     return
             # 바코드 api
             res = requests.get(api_get.get_bar_cd_URL(
