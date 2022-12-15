@@ -137,6 +137,12 @@ class WindowClass(QMainWindow, form_mainclass):
                         else:
                             self.tableWidget.setItem(x, 1,
                                 QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-' + str(int(times[2]) - datetime.now().day) + ')'))
+                else:
+                    self.tableWidget.item(x, 0).setBackground(QtGui.QColor(255, 255, 255))
+            else:
+                self.tableWidget.item(x, 0).setBackground(QtGui.QColor(255, 255, 255))
+        else:
+            self.tableWidget.item(x, 0).setBackground(QtGui.QColor(255, 255, 255))
 
 
     def goSearchWindow(self):
