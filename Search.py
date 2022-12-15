@@ -25,8 +25,6 @@ class searchwindow(QDialog, QWidget, form_searchclass):
         self.setupUi(self)
 
     def goRecipeWindow(self):
-        searchwindow(self.foodname).close()
-
         choicefood = self.S_tableWidget.item(
             self.S_tableWidget.currentRow(), 0).text()
         # 레시피가 있는 데이터인지 확인
@@ -37,6 +35,7 @@ class searchwindow(QDialog, QWidget, form_searchclass):
             QMessageBox.information(self, "닫기", "레시피를 준비 중입니다.")
             return
 
+        searchwindow(self.foodname).close()
         self.recipeW = Recipe.recipewindow(foodtitle=choicefood)
         self.recipeW.exec()
         searchwindow(self.foodname).show()  # recipe 창을 닫으면 다시 첫 번째 창이 보여짐
