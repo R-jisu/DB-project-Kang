@@ -81,8 +81,9 @@ background-color: #F3F3F3
     </property>
     <property name="styleSheet">
      <string notr="true">QTableWidget{
-border: 2px solid #F3F3F3;
-}</string>
+border: 2px solid #EEEEEE;
+}
+</string>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
@@ -341,6 +342,9 @@ border: 2px solid #F3F3F3;
       <width>161</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="verticalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>

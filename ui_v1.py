@@ -17,8 +17,6 @@ form_recipeclass = uic.loadUiType("recipe.ui")[0]
 form_searchclass = uic.loadUiType("search.ui")[0]
 form_mainclass = uic.loadUiType("main.ui")[0]
 
-# 화면을 띄우는데 사용되는 Class 선언
-
 
 class WindowClass(QMainWindow, form_mainclass):
     def __init__(self):
@@ -35,7 +33,6 @@ class WindowClass(QMainWindow, form_mainclass):
 
         # 표의 전체 row 수 저장 (30개)
         self.row_count = self.tableWidget.rowCount()
-
         self.cur = cur
         self.conn = conn
 
@@ -92,6 +89,9 @@ class WindowClass(QMainWindow, form_mainclass):
         # self.tableWidget.currentColumn()
 
     def goSearchWindow(self):
+        if self.searchtext.toPlainText() == '':
+            QMessageBox.information(self, "닫기", "값을 입력해주세요.")
+            return
         WindowClass().close()  # 메인윈도우 숨김
         self.search = searchwindow(self.searchtext.toPlainText())
         self.search.exec()  # search 창 닫을 때까지 기다림
@@ -100,35 +100,22 @@ class WindowClass(QMainWindow, form_mainclass):
 
     def ADDFunction(self):
         # ADD 버튼 눌릴 시
-        # self.tableWidget.item(self.tableWidget.currentRow(),self.tableWidget.currentColumn()).text()
-        # print(self.tableWidget.item(self.tableWidget.currentRow(),self.tableWidget.currentColumn()).text())
-        global url
-        global key
-
         if (self.textEdit.toPlainText()):
-            print(self.textEdit.toPlainText())
-
             # user가 입력한 바코드가 이미 있는 경우
             for idex in range(self.Tuples):
                 if self.textEdit.toPlainText() == self.tableWidget.item(idex, 3).text():
                     self.textEdit.setText('')
-                    print('이미 입력한 값입니다.')
+                    QMessageBox.information(self, "닫기", "이미 입력한 정보입니다.")
                     return
-
+            # 바코드 api
             res = requests.get(api_get.get_bar_cd_URL(
                 api_get.url, api_get.key, self.textEdit.toPlainText()))
             info = res.json()
-            # print(info)
 
             if info['C005']['total_count'] != '0':
                 for a in info['C005']['row']:
-                    print(a['PRDLST_NM'])  # 제품 이름
-                    print(a['BAR_CD'])  # 바코드
-                    print(a['POG_DAYCNT'])  # 제조일자
                     mydata = (a['PRDLST_NM'], a['POG_DAYCNT'], a['BAR_CD'], '')
-
                 cur.execute('INSERT into nangbuDB VALUES (?,?,?,?);', mydata)
-
                 conn.commit()
 
                 self.tableWidget.setItem(
@@ -138,25 +125,17 @@ class WindowClass(QMainWindow, form_mainclass):
                 self.tableWidget.setItem(
                     self.Tuples, 3, QTableWidgetItem(a['BAR_CD']))  # 바코드
                 self.Tuples += 1
-
             else:
-                print("바코드 정보가 없습니다")
+                QMessageBox.information(self, "닫기", "없는 정보입니다.")
             self.textEdit.setText('')
 
     def DELFunction(self):
-        print("del")
-        # DEL 버튼 눌릴 시
         self.Tuples -= 1
-
         Tablecode = self.tableWidget.item(
             self.tableWidget.currentRow(), 3).text()
-        print(Tablecode)
-
         cur.execute('delete from nangbuDB where barcode = ?', (Tablecode,))
         conn.commit()
-
         self.tableWidget.removeRow(self.tableWidget.currentRow())
-        # self.tableWidget.removeRow(self.tableWidget.currentRow())
 
 
 class searchwindow(QDialog, QWidget, form_searchclass):
@@ -164,9 +143,7 @@ class searchwindow(QDialog, QWidget, form_searchclass):
         super(searchwindow, self).__init__()
         self.initUi()
         self.show()
-
         self.foodname = foodname
-
         self.S_searchtext.setText(self.foodname)
         self.searching()
 
@@ -198,6 +175,8 @@ class searchwindow(QDialog, QWidget, form_searchclass):
                 self.S_tableWidget.setItem(
                     self.Tuples, 0, QTableWidgetItem(a['RCP_NM']))  # 행 열 데이터
                 self.Tuples += 1  # 위에부터 표 채우기
+        else:
+            QMessageBox.information(self, "닫기", "값을 입력해주세요.")
 
 
 class recipewindow(QDialog, QWidget, form_recipeclass):
