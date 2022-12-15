@@ -218,12 +218,12 @@ border: 2px solid #EEEEEE;
     </column>
     <column>
      <property name="text">
-      <string>기한</string>
+      <string>D-day</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>dday</string>
+      <string>기한</string>
      </property>
     </column>
     <column>
