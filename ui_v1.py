@@ -6,8 +6,11 @@ from datetime import datetime
 
 import api_get
 import requests
+import sqlite3
 
 
+con = sqlite3.connect('./nangbuDB.db')
+cur = con.cursor()
 # UI파일 연결
 # 단, UI파일은 Python 코드 파일과 같은 디렉토리에 위치해야한다.
 form_searchclass = uic.loadUiType("search.ui")[0]
@@ -25,43 +28,55 @@ class WindowClass(QMainWindow, form_mainclass):
         self.ADD.clicked.connect(self.ADDFunction)
         self.DELETE.clicked.connect(self.DELFunction)
 
-        self.Tuples = 6
+        self.Tuples = 0
+        
 
         # 표의 전체 row 수 저장 (30개)
         self.row_count = self.tableWidget.rowCount()
+
+        self.cur = cur
+        cur.execute('SELECT * FROM nangbuDB')
+        for row in cur:
+            print(row)
+
+            self.tableWidget.setItem(0, 0, QTableWidgetItem(row[0]))
+            self.tableWidget.setItem(0, 1, QTableWidgetItem(row[3]))
+            self.tableWidget.setItem(0, 2, QTableWidgetItem(row[1]))
+
         #현재 날짜 출력
         #print(datetime.now().year,datetime.now().month,datetime.now().day)
-        for x in range(self.row_count):
+        # for x in range(self.row_count):
             #print(self.tableWidget.item(0, 1).text(), x)
-            if self.tableWidget.item(x, 1): # 재료를 표에 저장한 상태일 때, 빈 칸이 아닐 때
-                days = self.tableWidget.item(x, 1).text().split('.')
-                #print(days[0], days[1], days[2])
+            # if self.tableWidget.item(x, 1): # 재료를 표에 저장한 상태일 때, 빈 칸이 아닐 때
+                
+                # days = self.tableWidget.item(x, 1).text().split('.')
+                # #print(days[0], days[1], days[2])
 
-                if int(days[0]) < datetime.now().year: #1년 이상 지남 -> 죽음
-                    self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
-                    self.tableWidget.setItem(x, 1,
-                            QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
-                elif int(days[0]) == datetime.now().year: #같은 년도일 때
-                    if int(days[1]) < datetime.now().month: # 1달 이상 지남 -> 죽음
-                        self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
-                        self.tableWidget.setItem(x, 1,
-                            QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
+                # if int(days[0]) < datetime.now().year: #1년 이상 지남 -> 죽음
+                #     self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
+                #     self.tableWidget.setItem(x, 1,
+                #             QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
+                # elif int(days[0]) == datetime.now().year: #같은 년도일 때
+                #     if int(days[1]) < datetime.now().month: # 1달 이상 지남 -> 죽음
+                #         self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
+                #         self.tableWidget.setItem(x, 1,
+                #             QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
 
-                    elif int(days[1]) == datetime.now().month:# 같은 달일때
-                        if int(days[2]) < datetime.now().day: #하루 이상 지남 -> 죽음
-                            self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
-                            self.tableWidget.setItem(x, 1,
-                                QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
-                        elif int(days[2]) >= datetime.now().day:
+                #     elif int(days[1]) == datetime.now().month:# 같은 달일때
+                #         if int(days[2]) < datetime.now().day: #하루 이상 지남 -> 죽음
+                #             self.tableWidget.item(x, 0).setBackground(QtGui.QColor(170, 90, 90))
+                #             self.tableWidget.setItem(x, 1,
+                #                 QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (dead)'))
+                #         elif int(days[2]) >= datetime.now().day:
                             
-                            if (int(days[2]) - datetime.now().day) <= 5: #5일 이내로 남음, 핑크색
-                                self.tableWidget.item(x, 0).setBackground(QtGui.QColor(255, 170, 170))
-                                if (int(days[2]) - datetime.now().day) == 0:
-                                    self.tableWidget.setItem(x, 1,
-                                        QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-day)'))
-                                else:
-                                    self.tableWidget.setItem(x, 1,
-                                        QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-' + str(int(days[2]) - datetime.now().day) + ')'))
+                #             if (int(days[2]) - datetime.now().day) <= 5: #5일 이내로 남음, 핑크색
+                #                 self.tableWidget.item(x, 0).setBackground(QtGui.QColor(255, 170, 170))
+                #                 if (int(days[2]) - datetime.now().day) == 0:
+                #                     self.tableWidget.setItem(x, 1,
+                #                         QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-day)'))
+                #                 else:
+                #                     self.tableWidget.setItem(x, 1,
+                #                         QTableWidgetItem(self.tableWidget.item(x, 1).text() + ' (D-' + str(int(days[2]) - datetime.now().day) + ')'))
         # dksl
         # self.tableWidget.item(0, 0).setBackground(QtGui.QColor(255, 100, 100))
 
@@ -79,12 +94,16 @@ class WindowClass(QMainWindow, form_mainclass):
         # ADD 버튼 눌릴 시
         # self.tableWidget.item(self.tableWidget.currentRow(),self.tableWidget.currentColumn()).text()
         # print(self.tableWidget.item(self.tableWidget.currentRow(),self.tableWidget.currentColumn()).text())
-        print("add")
-        self.tableWidget.setItem(
-            self.Tuples, 0, QTableWidgetItem(str(self.Tuples)))
-        self.tableWidget.setItem(
-            self.Tuples, 1, QTableWidgetItem(str(self.Tuples)))
-        self.Tuples += 1
+        input("바코드를 입력하세요 : ")
+        res = requests.get(api_get.get_bar_cd_URL(api_get.url, api_get.key, '8801056171032'))
+        info = res.json()
+        print(info)
+
+        # self.tableWidget.setItem(
+        #     self.Tuples, 0, QTableWidgetItem(str(self.Tuples)))
+        # self.tableWidget.setItem(
+        #     self.Tuples, 1, QTableWidgetItem(str(self.Tuples)))
+        # self.Tuples += 1
 
     def DELFunction(self):
         print("del")
