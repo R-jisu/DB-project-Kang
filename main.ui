@@ -213,7 +213,7 @@ border: 2px solid #EEEEEE;
     <row/>
     <column>
      <property name="text">
-      <string>재료</string>
+      <string>식품</string>
      </property>
     </column>
     <column>
