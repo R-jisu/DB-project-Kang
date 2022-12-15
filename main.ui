@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>612</width>
+    <width>541</width>
     <height>523</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTextEdit" name="searchtext">
@@ -22,7 +25,7 @@
      <rect>
       <x>90</x>
       <y>30</y>
-      <width>261</width>
+      <width>431</width>
       <height>21</height>
      </rect>
     </property>
@@ -44,7 +47,7 @@
      <rect>
       <x>30</x>
       <y>70</y>
-      <width>391</width>
+      <width>491</width>
       <height>391</height>
      </rect>
     </property>
@@ -63,14 +66,29 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="showDropIndicator" stdset="0">
+     <bool>false</bool>
+    </property>
     <property name="dragEnabled">
      <bool>false</bool>
     </property>
+    <property name="dragDropOverwriteMode">
+     <bool>false</bool>
+    </property>
     <property name="defaultDropAction">
-     <enum>Qt::TargetMoveAction</enum>
+     <enum>Qt::IgnoreAction</enum>
     </property>
     <property name="alternatingRowColors">
      <bool>false</bool>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SingleSelection</enum>
+    </property>
+    <property name="textElideMode">
+     <enum>Qt::ElideLeft</enum>
     </property>
     <property name="showGrid">
      <bool>true</bool>
@@ -85,13 +103,22 @@
      <number>30</number>
     </property>
     <attribute name="horizontalHeaderVisible">
-     <bool>false</bool>
+     <bool>true</bool>
     </attribute>
     <attribute name="horizontalHeaderCascadingSectionResizes">
      <bool>false</bool>
     </attribute>
     <attribute name="horizontalHeaderMinimumSectionSize">
-     <number>22</number>
+     <number>50</number>
+    </attribute>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>160</number>
+    </attribute>
+    <attribute name="horizontalHeaderHighlightSections">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+     <bool>false</bool>
     </attribute>
     <attribute name="horizontalHeaderStretchLastSection">
      <bool>true</bool>
@@ -100,6 +127,9 @@
      <bool>false</bool>
     </attribute>
     <attribute name="verticalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderShowSortIndicator" stdset="0">
      <bool>false</bool>
     </attribute>
     <row>
@@ -171,6 +201,11 @@
       <string>dday</string>
      </property>
     </column>
+    <column>
+     <property name="text">
+      <string>barcode</string>
+     </property>
+    </column>
     <item row="0" column="0">
      <property name="text">
       <string/>
@@ -232,32 +267,6 @@
      </property>
     </item>
    </widget>
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>70</y>
-      <width>82</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QPushButton" name="ADD">
-       <property name="text">
-        <string>ADD</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="DELETE">
-       <property name="text">
-        <string>DEL</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QPushButton" name="search">
     <property name="geometry">
      <rect>
@@ -271,14 +280,46 @@
      <string>검색</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="ADD">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>480</y>
+      <width>80</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ADD</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="DELETE">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>480</y>
+      <width>80</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>DEL</string>
+    </property>
+   </widget>
    <widget class="QTextEdit" name="textEdit">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>30</y>
-      <width>101</width>
-      <height>31</height>
+      <x>30</x>
+      <y>480</y>
+      <width>251</width>
+      <height>21</height>
      </rect>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
    </widget>
   </widget>
