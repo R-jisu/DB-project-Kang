@@ -30,7 +30,8 @@ class recipewindow(QDialog, QWidget, form_recipeclass):
             api_get.url, api_get.key, self.foodtitle))
         info = res.json()
 
-        self.ingredient.setText(info['COOKRCP01']['row'][0]['RCP_PARTS_DTLS'])
+        self.ingredient.setText(
+            info['COOKRCP01']['row'][0]['RCP_PARTS_DTLS'])
 
         recipe = ""
         finalrecipe = ""

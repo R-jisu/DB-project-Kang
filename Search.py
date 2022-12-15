@@ -26,10 +26,19 @@ class searchwindow(QDialog, QWidget, form_searchclass):
 
     def goRecipeWindow(self):
         searchwindow(self.foodname).close()
+
         choicefood = self.S_tableWidget.item(
             self.S_tableWidget.currentRow(), 0).text()
-        self.recipe = Recipe.recipewindow(foodtitle=choicefood)
-        self.recipe.exec()
+        # 레시피가 있는 데이터인지 확인
+        res = requests.get(api_get.get_rcp_URL(
+            api_get.url, api_get.key, choicefood))
+        info = res.json()
+        if info['COOKRCP01']['total_count'] == '0':
+            QMessageBox.information(self, "닫기", "레시피를 준비 중입니다.")
+            return
+
+        self.recipeW = Recipe.recipewindow(foodtitle=choicefood)
+        self.recipeW.exec()
         searchwindow(self.foodname).show()  # recipe 창을 닫으면 다시 첫 번째 창이 보여짐
 
     def goMainWindow(self):
@@ -40,8 +49,8 @@ class searchwindow(QDialog, QWidget, form_searchclass):
         if self.S_searchtext.toPlainText() != '':
             res = requests.get(api_get.getURL(
                 api_get.url, api_get.key, self.S_searchtext.toPlainText()))
-            recipe = res.json()
-            for a in recipe['COOKRCP01']['row']:
+            self.recipe = res.json()
+            for a in self.recipe['COOKRCP01']['row']:
                 self.S_tableWidget.setItem(
                     self.Tuples, 0, QTableWidgetItem(a['RCP_NM']))  # 행 열 데이터
                 self.Tuples += 1  # 위에부터 표 채우기

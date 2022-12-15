@@ -36,7 +36,7 @@ def get_rcp_URL(endpoint, key, foodtitle):
 
 def get_bar_cd_URL(endpoint, key, barcode):
 
-    url = f"{endpoint}/{key}/C005/json/1/1/BAR_CD={barcode}"
+    url = f"{endpoint}/{key}/C005/json/1/100/BAR_CD={barcode}"
 
     # RCP_PARTS_DTLS={ingredient}
     print(url)
@@ -50,7 +50,7 @@ def get_bar_cd_URL(endpoint, key, barcode):
 
 # res = requests.get(get_bar_cd_URL(url, key,'8801056171032'))
 # res = requests.get(get_rcp_URL(url, key, '초계탕과 사색곤약'))
-# # res = requests.get(getURL(url, key,'양배추'))
+# res = requests.get(getURL(url, key, '오이'))
 # info = res.json()
 # print(info)
 # for a in info['COOKRCP01']['row']:
